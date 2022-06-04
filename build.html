@@ -62,7 +62,7 @@
     //使用ajax获取数据
     var data;
     const xmlHttpRequest = new XMLHttpRequest();
-    xmlHttpRequest.open('get', '../JSON/pro.json');
+    xmlHttpRequest.open('get', 'JSON/pro.json');
     xmlHttpRequest.send();
     xmlHttpRequest.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
