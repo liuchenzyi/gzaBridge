@@ -127,9 +127,8 @@
     xmlHttpRequest.send();
     xmlHttpRequest.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
-
+            console.log(data);
             data = JSON.parse(this.responseText);
-            loadData(data[index])
         }
     }
 
