@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>世界大湾区</title>
+
+    <link type="text/css" rel="stylesheet" href="stylesheet/navigationbar.css">
+
+    <!--    引入arcgis API for JavaScript  相关资源-->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.23/"></script>
+
+</head>
+<body>
+<nav>
+    <ul>
+        <li><a href="https://liuchenfanjun.github.io/introductio">简介</a></li>
+        <li><a href="https://liuchenfanjun.github.io/planning">前期规划</a></li>
+        <li><a href="https://liuchenfanjun.github.io/build">建设过程</a></li>
+        <li><a href="https://liuchenfanjun.github.io/bay">世界大湾区</a></li>
+    </ul>
+</nav>
+<section>
+    <h1 style="text-align: center;">世界级大湾区</h1>
+    <p><span style="width: 50%">粤港澳大湾区（Guangdong-Hong Kong-Macao Greater Bay Area，缩写：the Greater Bay Area(GBA)
+        ），包括香港特别行政区、澳门特别行政区和广东省广州市、深圳市、珠海市、佛山市、惠州市、东莞市、中山市、江门市、肇庆市，总面积5.6万平方公里，是中国开放程度最高、经济活力最强的区域之一，在国家发展大局中具有重要战略地位。建设粤港澳大湾区，既是新时代推动形成全面开放新格局的新尝试，也是推动“一国两制”事业发展的新实践。</span>
+    </p>
+    <p>
+        “粤港澳大湾区”从学术界的讨论到地方政策的考量，再到国家战略的提出，历时20余年。1994年，时任香港科技大学校长吴家玮提出，对标旧金山，建设深港湾区。二十一世纪初，广州率先提出依托南沙港，对标东京湾区。2009年10月28日，粤港澳三地政府有关部门在澳门联合发布《大珠江三角洲城镇群协调发展规划研究》，提出构建珠江口湾区，粤港澳共建世界级城镇群。2014年，深圳市政府工作报告提出“打造湾区经济”。</p>
+
+    <p><strong>交通设施的互联互通，是湾区发展的基础和前提。</strong>从世界经验看，桥梁对湾区的形成和塑造，极其重要。不论是纽约湾、旧金山湾，还是东京湾，无一不是以桥梁相连。</p>
+
+    <div id="container">
+        <div id="viewDiv"></div>
+        <img style="float: left" width="48%" height="100%"
+             src="http://5b0988e595225.cdn.sohucs.com/images/20181024/f8eb67e047314cb3bfee4f404a78635b.jpeg"/>
+    </div>
+    <p><strong>粤港澳大湾区用不足1%的国土面积，不足5%的人口总量，创造了国内生产总值的11%</strong>
+    </p>
+    <p>与世界其他三大湾区对比，粤港澳大湾区在人口、面积、港口吞吐量、旅客吞吐量、GDP增速等几个指标上，排名第一；经济总量，也已
+        <strong>超过旧金山湾区，接近纽约湾区</strong>
+    <p>
+        <img src="http://5b0988e595225.cdn.sohucs.com/images/20181025/22b06da241a54c9d806e0d5868d848a1.jpeg"/>
+    </p>
+    <p>粤港澳大湾区与世界其他三大湾区对比</p>
+    <p>香港是全球金融中心，深圳是全球创新中心，广州是全球商贸中心，东莞、佛山、惠州是全球重要的制造基地，粤港澳大湾区已经具备一个世界大湾区的底气及基础。</p>
+    <p>港珠澳大桥的开通，势必极大降低人员、物品流动的时间和成本，促进城市互融互通、协同发展。</p>
+    <p>实际上，港珠澳大桥通车的意义，早已超出了大桥本身。由于地质结构复杂、施工环境恶劣、技术标准高、环保要求高，这座桥梁从开工建设到接近完工通车，一路都面临着种种超乎想象的困难与挑战。</p>
+</section>
+<script>
+    require(["esri/config",
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/GeoJSONLayer",
+        "esri/Graphic",
+        "esri/layers/GraphicsLayer"
+    ], function (esriConfig, Map, MapView, GeoJSONLayer, Graphic, GraphicsLayer) {
+
+        esriConfig.apiKey = "AAPK56e3ac027f044c4089d8ceec232fc05dYaOuzVRzm8tMRqvzOvDvIEevbqJ85yppn9PacU6cy4duurJrVK9wo_8BcWO8i8bi";
+
+        const map = new Map({
+            basemap: "osm-standard" // Basemap layer service
+        });
+
+
+        const view = new MapView({
+            map: map,
+            center: [113.56210399999998, 22.285411], // Longitude, latitude
+            zoom: 6, // Zoom level
+            container: "viewDiv" // Div element
+        });
+        const geojsonlayer = new GeoJSONLayer({
+            url: "../Javascript/dwq.json",
+            copyright: "USGS Earthquakes"
+        });
+        map.add(geojsonlayer);  // adds the layer to the map
+        //分级渲染
+        function classify() {
+
+            // 第二步，指定渲染器
+            const renderer = {
+                type: "simple", // autocasts as new SimpleRenderer()
+                symbol: {
+                    type: "simple-fill", // autocasts as new SimpleFillSymbol()
+                    outline: {
+                        // makes the outlines of all features consistently light gray
+                        color: "lightgray",
+                        width: 0.5
+                    }
+                },
+                visualVariables: [
+                    {
+                        type: "color", // indicates this is a color visual variable
+                        field: "population", // total population in poverty
+                        stops: [
+                            {
+                                value: 50, // features where < 10% of the pop in poverty
+
+                                color: "#10305e，0.5", // will be assigned this color (beige)
+                                label: "五十万" // label to display in the legend
+                            },
+                            {
+                                value: 1800, // features where > 30% of the pop in poverty
+                                color: "#660016", // will be assigned this color (purple)
+                                label: "一千八百万" // label to display in the legend
+                            }
+                        ]
+                    }
+                ]
+            };
+            geojsonlayer.renderer = renderer;
+        }
+        classify();
+
+    });
+
+
+
+
+</script>
+</body>
+</html>

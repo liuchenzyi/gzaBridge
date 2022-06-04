@@ -1,0 +1,85 @@
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+nav {
+    height: 5%;
+    width: 100%;
+}
+ul{
+    padding: 0px;
+    height: 100%;
+    margin: 0px;
+}
+li {
+    list-style-type: none; /* 去掉li前的点 */
+    float: left; /*将li设置成做浮动，变为联动*/
+    width: 25%
+}
+
+li a {
+    display: block; /*将a变成块状*/
+    width: 100%; /*设置块的宽度*/
+    height: 50px; /*设置块的长度*/
+
+    font-family: Microsoft Yahei;
+    line-height: 50px; /*设置字体在块中的高度*/
+    background-color: #2f4f4f;
+    margin: 0px 0px; /*块里的高宽通过margin设置*/
+    color: #fff;
+    text-align: center; /*字体居中*/
+    text-decoration: none; /*去掉下划线*/
+    font-size: 15px;
+}
+
+a:hover {
+    background-color: #2f6f4f;
+}
+
+#container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 92%;
+}
+
+#viewDiv {
+    width: 75%;
+    height: 100%;
+    border: 2px dashed red;
+    float: left;
+}
+
+#info {
+    width: 24%;
+    height: 100%;
+    border: 2px solid red;
+    float: left;
+    position: relative;
+}
+
+#info p {
+    text-indent: 2em;
+}
+#panel{
+    width: 100%;
+    height: 12%;
+    border: 1px dashed gold;
+    position: absolute;
+    bottom: 0px;
+}
+#next{
+    width: 10%;
+    float: right;
+    height: 100%;
+    background-image:url("../images/right.png");
+    background-repeat: no-repeat;
+}
+#previous{
+    width: 10%;
+    float: left;
+    height: 100%;
+    background-image: url("../images/left.png");
+    background-repeat: no-repeat;
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>建设过程</title>
+    <!--    导入高德地图样式-->
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
+    <!--    导入高德地图js-->
+    <script type="text/javascript"
+            src="https://webapi.amap.com/maps?v=1.4.15&key=40a4077bbec66c6e1b4c150e5c48e189"></script>
+    <link type="text/css" rel="stylesheet" href="stylesheet/navigation.css">
+
+</head>
+<body>
+<nav>
+    <ul>
+        <li><a href="index.html">简介</a></li>
+        <li><a href="prePlanning.html">前期规划</a></li>
+        <li><a href="../view/建设过程.html">建设过程</a></li>
+        <li><a href="bay.html">世界大湾区</a></li>
+    </ul>
+</nav>
+
+<div id="container"></div>
+
+<script>
+    const map = new AMap.Map('container', {
+        resizeEnable: true, //是否监控地图容器尺寸变化
+        zoom: 11, //初始化地图层级
+        layers: [new AMap.TileLayer.Satellite()
+
+            , new AMap.TileLayer.RoadNet()
+        ],
+        center: [113.78763473510742, 22.280657519613417] //初始化地图中心点
+    });
+    //添加marker并设置信息框
+    // 创建一个信息框模板
+    const infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
+
+    function loadMarker() {
+        //遍历数据，添加marker，并为其添加信息框
+        for (let i = 0; i < data.length; i++) {
+            const content = data[i];
+            console.log(panel(content));
+            const marker = new AMap.Marker({
+                position: content.location,
+                map: map
+            });
+            //设置信息框的内容
+            marker.content = panel(content);
+
+            marker.on('click', markerClick);
+            marker.emit('click', {target: marker});
+        }
+
+        function markerClick(e) {
+            infoWindow.setContent(e.target.content);
+            infoWindow.open(map, e.target.getPosition());
+        }
+    }
+
+    //使用ajax获取数据
+    var data;
+    const xmlHttpRequest = new XMLHttpRequest();
+    xmlHttpRequest.open('get', '../JSON/pro.json');
+    xmlHttpRequest.send();
+    xmlHttpRequest.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            data = JSON.parse(this.responseText);
+            //加载数据
+            loadMarker();
+        }
+    }
+
+    //返回界面的html
+    function panel(item) {
+        let h2 = '<h2>' + item.year + '</h2>';
+        let h4 = '<h4>' + item.title + '</h4>';
+        let img = '<img width="100%" height="30%" src=' + item.image + '>';
+        return h2 + h4 + img;
+    }
+
+</script>
+</body>
+</html>

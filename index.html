@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>简介</title>
+
+    <!--    导入高德地图-->
+    <script type="text/javascript"
+            src="https://webapi.amap.com/maps?v=1.4.15&key=40a4077bbec66c6e1b4c150e5c48e189"></script>
+    <link type="text/css" rel="stylesheet" href="stylesheet/navigation.css">
+    <style>
+        #container {
+            width: 600px;
+            height: 400px;
+            margin: auto;
+        }
+        p{
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<nav>
+    <ul>
+        <li><a href="index.html">简介</a></li>
+        <li><a href="prePlanning.html">前期规划</a></li>
+        <li><a href="build.html">建设过程</a></li>
+        <li><a href="bay.html">世界大湾区</a></li>
+    </ul>
+</nav>
+
+<div style="width: 80%;margin: auto" >
+    <h1 style="text-align: center">港珠澳大桥简介</h1>
+    <p>
+        港珠澳大桥（Hong Kong-Zhuhai-Macao Bridge）是中国境内一座连接香港、珠海和澳门的桥隧工程，位于中国广东省伶仃洋区域内，为珠江三角洲地区环线高速公路南环段。
+        港珠澳大桥于2009年12月15日动工建设；于2017年7月7日实现主体工程全线贯通； 于2018年2月6日完成主体工程验收；于2018年10月24日上午9时开通运营。
+        港珠澳大桥东起香港国际机场附近的香港口岸人工岛，向西横跨南海伶仃洋后连接珠海和澳门人工岛，止于珠海洪湾立交；桥隧全长55千米，其中主桥29.6千米、香港口岸至珠澳口岸41.6千米；桥面为双向六车道高速公路，设计速度100千米 / 小时；工程项目总投资额1269亿元。
+        2018年12月1日起，首批粤澳非营运小汽车可免加签通行港珠澳大桥跨境段。
+        港珠澳大桥因其超大的建筑规模、空前的施工难度以及顶尖的建造技术而闻名世界；大桥项目总设计师是孟凡超，总工程师是苏权科，岛隧工程项目总经理、总工程师是林鸣。
+    </p>
+
+        大桥主体工程由粤、港、澳三方政府共同组建的港珠澳大桥管理局负责建设、运营、管理和维护，三地口岸及连接线由各自政府分别建设和运营。主体工程实行桥、岛、隧组合，总长约29.6公里，穿越伶仃航道和铜鼓西航道段约6.7公里为隧道，东、西两端各设置一个海中人工岛（蓝海豚岛和白海豚岛），犹如“伶仃双贝”熠熠生辉；其余路段约22.9公里为桥梁，分别设有寓意三地同心的“中国结”青州桥、人与自然和谐相处的“海豚塔”江海桥，以及扬帆起航的“风帆塔”九洲桥三座通航斜拉桥。</p>
+    <p>
+        珠澳口岸人工岛总面积208.87公顷，分为三个区域，分别为珠海公路口岸管理区107.33公顷、澳门口岸管理区71.61公顷、大桥管理区29.93公顷，口岸由各自独立管辖。13.4公里的珠海连接线衔接珠海公路口岸与西部沿海高速公路月环至南屏支线延长线，将大桥纳入国家高速公路网络；澳门连接线从澳门口岸以桥梁方式接入澳门填海新区。</p>
+    <img style="position: relative;left: 30%;" src="https://static.50yc.com/info/2017/12/f5afad10-3b70-4ae1-bce5-153876e4d42c_org.jpg">
+    <p style="text-align: center">港珠澳大桥结构简图</p>
+</div>
+<div id="container"></div>
+
+<script>
+    const map = new AMap.Map('container', {
+        resizeEnable: true, //是否监控地图容器尺寸变化
+        zoom: 11, //初始化地图层级
+        layers: [new AMap.TileLayer.Satellite()
+
+            // , new AMap.TileLayer.RoadNet()
+        ],
+        center: [113.78763473510742, 22.280657519613417] //初始化地图中心点
+    });
+
+    //异步加载插件
+    AMap.plugin(['AMap.ToolBar', 'AMap.Scale', 'AMap.ControlBar'], function () {//异步同时加载多个插件
+        map.addControl(new AMap.ToolBar());
+        map.addControl(new AMap.Scale());
+        map.addControl(new AMap.ControlBar());
+        // var driving = new AMap.Driving();//驾车路线规划
+    });
+    //定义全局变量保存GeoJson
+    const GeoJson = new AMap.GeoJSON({
+        geoJSON: null
+    });
+    //导入数据
+    // if (JSON.stringify(getData()) !== '[]'){GeoJson.importData(getData());}  //若数据为空不导入
+    GeoJson.importData(getData());
+    //添加点击事件
+
+    map.add(GeoJson);
+    getData();
+
+    function getData() {
+
+        const xmlHttpRequest = new XMLHttpRequest();
+        xmlHttpRequest.open('get', '../JSON/line.geojson');
+        xmlHttpRequest.send();
+        xmlHttpRequest.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+
+                data = JSON.parse(this.responseText);
+
+                // console.log(data.features)
+                for (let i = 0; i < data.features.length; i++) {
+                    let polyline = []
+                    var path = data.features[i].geometry.coordinates[0];
+                    // console.log(path);
+                    // drawline(path);
+                    for (let j = 0; j < path.length; j++) {
+                        // a = ;
+                        polyline.push([path[j][0], path[j][1]])
+                    }
+                    drawline(polyline);
+                }
+            }
+        }
+    }
+
+    function drawline(path) {
+        var path = path;
+
+        var polyline = new AMap.Polyline({
+            path: path,
+            isOutline: true,
+            outlineColor: '#ffeeff',
+            borderWeight: 3,
+            strokeColor: "#3366FF",
+            strokeOpacity: 1,
+            strokeWeight: 6,
+            // 折线样式还支持 'dashed'
+            strokeStyle: "solid",
+            // strokeStyle是dashed时有效
+            strokeDasharray: [10, 5],
+            lineJoin: 'round',
+            lineCap: 'round',
+            zIndex: 50,
+        })
+
+        polyline.setMap(map)
+
+    }
+
+
+</script>
+</body>
+</html>

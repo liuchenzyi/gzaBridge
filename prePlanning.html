@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>前期规划</title>
+    <link type="text/css" rel="stylesheet" href="stylesheet/navigation.css">
+    <!--    引入arcgis API for JavaScript  相关资源-->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.23/"></script>
+
+</head>
+<body>
+
+<nav>
+    <ul>
+        <li><a href="index.html">简介</a></li>
+        <li><a href="prePlanning.html">前期规划</a></li>
+        <li><a href="build.html">建设过程</a></li>
+        <li><a href="bay.html">世界大湾区</a></li>
+    </ul>
+
+</nav>
+
+<div id="container">
+    <div id="viewDiv"></div>
+    <div id="info">
+        <h2 id="year"></h2>
+        <h4 id="title"></h4>
+        <img id="image" width="100%" height="30%" alt="">
+        <p id="describe"></p>
+        <div id="panel">
+            <button id="previous"></button>
+            <button id="next"></button>
+<!--            <button id="first">回到起点</button>-->
+
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    // noinspection LanguageDetectionInspection
+
+    let index = -1;
+    require(["esri/config",
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/Graphic",
+        "esri/layers/GraphicsLayer"
+    ], function (esriConfig, Map, MapView, Graphic, GraphicsLayer) {
+
+        esriConfig.apiKey = "AAPK56e3ac027f044c4089d8ceec232fc05dYaOuzVRzm8tMRqvzOvDvIEevbqJ85yppn9PacU6cy4duurJrVK9wo_8BcWO8i8bi";
+
+        const map = new Map({
+            basemap: "osm-standard" // Basemap layer service
+        });
+
+
+        const view = new MapView({
+            map: map,
+            center: [113.56210399999998, 22.285411], // Longitude, latitude
+            zoom: 8, // Zoom level
+            container: "viewDiv" // Div element
+        });
+        //添加图层
+        const graphicsLayer = new GraphicsLayer();
+        map.add(graphicsLayer);
+
+
+        //设置点标记样式
+        const simpleMarkerSymbol = {
+            type: "simple-marker",
+            color: [226, 119, 40],  // Orange
+            outline: {
+                color: 'blue', // White
+                width: 4
+            }
+        };
+
+
+        document.getElementById('next').addEventListener('click', function () {
+
+            index++;
+            if (index < data.length) {
+                let lonlat = loadData(data[index])
+                //创建点
+                const point = { //Create a point
+                    type: "point",
+                    longitude: lonlat[0],
+                    latitude: lonlat[1]
+                };
+                const pointGraphic = new Graphic({
+                    geometry: point,
+                    symbol: simpleMarkerSymbol
+                });
+                graphicsLayer.add(pointGraphic);
+                view.goTo({
+                    center: lonlat,
+                    duration: 1000 //视角跳转时长为秒
+                });
+            } else {
+                alert('over')
+                index = data.length - 1
+            }
+        });
+        document.getElementById('previous').addEventListener('click', function () {
+            index--;
+            if (index < 0) {
+                index = 0
+                return;
+            }
+            view.goTo({
+                center: loadData(data[index]),
+                duration: 1000 //视角跳转时长为秒
+            });
+        });
+    });
+
+
+    //构造函数
+    function Event(location, year, title, url, describe) {
+        this.location = location;
+        this.year = year;
+        this.title = title;
+        this.image = url;
+        this.describe = describe;
+    }
+
+   data = [
+       {
+           "location": [
+               114.163825,
+               22.276284
+           ],
+           "year": 1983,
+           "title": "香港富商胡应湘提出兴建连接香港与珠海的伶仃洋大桥",
+           "image": "../images/hyx.jpg",
+           "describe": "胡应湘，香港合和实业有限公司主席，香港工程科学院院士。原籍广州花都，1935年生于中国香港，现为全国政协委员、香港事务顾问、广东省中华文化促进会名誉会长、广州市教育基金会名誉会长。\n\n<p>1983年的一个夏夜，在位于香港铜锣湾合和中心64层的“胡公馆”里，香港著名实业家胡应湘提出一个大胆的设想：何不规划寻找另一条使珠江西部和香港直接对接的跨海大桥，这样就与广深、广珠高速公路形成了整个珠三角环状高速路网？他是首个提出跨伶仃洋建桥的商界第一人，随后他将多次修改比较成形的方案定名为《兴建内伶仃大桥的设想》。</p>"
+       },
+       {
+           "location": [
+               113.57670694068071,
+               22.27157538133847
+           ],
+           "year": 1989,
+           "title": "珠海市人民政府首次公布伶仃洋大桥计划",
+           "image": "../images/zhs.jpg",
+           "describe": "为加快珠海经济特区及珠三角区域发展战略的推进，1987年，珠海市委、市政府提出了“打通对外开放通道，建设一座连接珠海与香港的伶仃洋大桥”的决策。时任珠海市委书记梁广大，便从那时开始了为了这座跨海大桥的奔走。<p>1989年，珠海市人民政府首次公布伶仃洋大桥计划</p>"
+       },
+       {
+           "location": [
+               116.41864700000002,
+               39.922968
+           ],
+           "year": 1992,
+           "title": "根据中国高速公路网的规划制定，沿海高速公路衔接伶仃洋大桥",
+           "image": "../images/cccc.png",
+           "describe": "1992年7月，珠海正式委托中国交通公路规划设计院编制《伶仃洋跨海工程预可行性研究报告》，并于1996年获得国家计委批准立项。"
+       },
+       {
+           "location": [
+               116.40263400000003,
+               39.901443
+           ],
+           "year": 1998,
+           "title": "中国国务院正式批准伶仃洋跨海大桥工程项目",
+           "image": "../images/gwy.jpg",
+           "describe": "港珠澳大桥（Hong Kong-Zhuhai-Macao Bridge）是中国境内一座连接中国香港、广东珠海和中国澳门的桥隧工程，位于中国广东省珠江口伶仃洋区域内，因其超大的建筑规模、空前的施工难度以及顶尖的建造技术而闻名世界。港珠澳大桥全长55千米，其中主桥29.6千米、中国香港口岸至珠澳口岸41.6千米；桥面为双向六车道高速公路，设计速度100千米/小时。"
+       },
+       {
+           "location": [
+               114.16382499999997,
+               22.276284
+           ],
+           "year": 2003,
+           "title": "伶仃洋大桥项目被港珠澳大桥项目取代",
+           "image": "https://n.sinaimg.cn/spider202044/550/w750h600/20200404/d7aa-irtymmv9932828.jpg",
+           "describe": "<p>2002年，内地经济取得了飞速发展，珠三角地区城市群崛起，而香港却面临经济下滑的挑战。此时，胡应湘再次提出了兴建港珠澳大桥的计划，时任香港特区行政长官董建华明确表示支持，香港政府随后主动向中央政府提出修建港珠澳大桥的建议。</p><p>2003年8月，国务院正式批准三地政府开展港珠澳大桥前期工作，并同意粤、港、澳三地成立港珠澳大桥前期工作协调小组，全面开展各项前期工作。次年4月，港珠澳大桥前期工作协调小组办公室成立，各项建设前期工作全面启动。</p>"
+       },
+       {
+           "location": [
+               113.56210399999998,
+               22.285411
+           ],
+           "year": 2004,
+           "title": "港珠澳大桥前期协调小组成立，全面启动大桥各项建设前期工作",
+           "image": "https://pic.baike.soso.com/ugc/baikepic2/0/ori-20190828153653-2106201611_jpg_748_440_37254.jpg/800",
+           "describe": "港珠澳大桥前期工作协调小组办公室成立，各项建设前期工作全面启动。针对大桥工程可行性研究结论、协调通航标准、白海豚自然保护区、港珠澳大桥投融资方案及三地框架协议等问题，为确定可行性方案，港珠澳大桥前期工作协调小组曾多次增设专题展开反复论证。"
+       },
+       {
+           "location": [
+               113.57672600000001,
+               22.270715
+           ],
+           "year": 2005,
+           "title": "港珠澳大桥前期工作协调小组第五次会议",
+           "image": "http://img1.cache.netease.com/catchpic/4/4B/4B6C21C12CAB603437692E13753B25D4.jpg",
+           "describe": "港珠澳大桥前期工作协调小组第五次会议在珠海召开，粤港澳三方政府同意专家组推荐意见，确定大桥东岸登陆点为大屿山散石湾，西岸澳门登陆点为明珠点，珠海登陆点为拱北，优先考虑采用北线散石湾～拱北/明珠桥隧组合方案。<p>由此，经过多方论证，港珠澳大桥最后确定的路接珠海，一端连接澳门，全长55公里，其中主体工程“海中桥隧”长35.578公里，海底隧道长约6.75公里。</p>"
+       },
+       {
+           "location": [
+               113.264434,23.129162
+           ],
+           "year": 2006,
+           "title": "港珠澳大桥前期工作协调小组第六次会议",
+           "image": "http://img1.cache.netease.com/catchpic/7/7E/7E25F825B290B80B61768125C8A59CDA.jpg",
+           "describe": "港珠澳大桥前期工作协调小组第六次会议在广州举行，经大量调研、征求意见及协调，认为港珠澳大桥口岸设置和查验模式实行“三地三检”较为稳妥，同意港珠澳大桥采用“三地三检口岸”查验模式。决定由公规院补充开展“三地三检”口岸方案、大桥融资方案深化等相关专题研究。"
+       },
+
+       {
+           "location": [
+               113.264434,23.129162
+           ],
+           "year": 2008,
+           "title": "粤港合作联席会议第十一次会议",
+           "image": "http://gia.info.gov.hk/general/200808/05/P200808050246_photo_412910.JPG",
+           "describe": "粤港合作联席会议第十一次会议提出，大桥海中桥隧主体工程采用“政府全额出资本金方式”；大桥主体工程资本金总额为157.3亿元，其中内地政府出资70亿元，香港出资67.5亿元，澳门出资19.8亿元；资本金以外部分由粤港澳三方共同组建的项目管理机构通过贷款来筹集。大桥建成后实行收费还贷。港、粤、澳三地政府分别负责口岸及连接线的投资。"
+       },
+       {
+           "location": [
+               116.40263400000003,
+               39.901443
+           ],
+           "year": 2009,
+           "title": "中国国务院批准建设港珠澳大桥",
+           "image": "../images/gwy.jpg",
+           "describe": "2009年10月28日，国务院常务会议正式批准了港珠澳大桥工程可行性研究报告。这标志着港珠澳大桥前期工作已顺利完成，港珠澳大桥正式进入实施阶段。<p>>当年12月15日，港珠澳大桥开工仪式举行。伴随着第一斗泥沙的挖掘出海，从1983年最初提出设想，到这一刻，奔走筹划16年，港珠澳大桥终于建设开工。</p>"
+       }
+   ]
+
+    function loadData(event) {
+        info.querySelector('#year').innerText = event.year + '年';
+        info.querySelector('#image').src = event.image;
+        info.querySelector('#title').innerText = event.title;
+        info.querySelector('#describe').innerHTML = event.describe;
+        return event.location;
+    }
+
+</script>
+</body>
+</html>
