@@ -7,7 +7,7 @@
     <!--    导入高德地图-->
     <script type="text/javascript"
             src="https://webapi.amap.com/maps?v=1.4.15&key=40a4077bbec66c6e1b4c150e5c48e189"></script>
-    <link type="text/css" rel="stylesheet" href="stylesheet/navigation.css">
+    <link type="text/css" rel="stylesheet" href="gzaBridge/stylesheet/navigation.css">
     <style>
         #container {
             width: 600px;
@@ -80,7 +80,7 @@
     function getData() {
 
         const xmlHttpRequest = new XMLHttpRequest();
-        xmlHttpRequest.open('get', '../JSON/line.geojson');
+        xmlHttpRequest.open('get', 'gzaBridge/JSON/line.geojson');
         xmlHttpRequest.send();
         xmlHttpRequest.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
